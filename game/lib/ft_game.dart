@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:cupertino_base/pipe.dart';
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -13,7 +15,8 @@ import 'utils_websockets.dart';
 
 class FtGame extends FlameGame
     with HasCollisionDetection, HasKeyboardHandlerComponents {
-  FtGame();
+  Timer? pipeTimer;
+  FtGame() {}
 
   late WebSocketsHandler websocket;
   FtPlayer? _player;
@@ -24,19 +27,62 @@ class FtGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    // Cargar imágenes del jugador y el cohete
+    //debugMode = true; // Uncomment to see the bounding boxes
     await images.loadAll([
       'player.png',
       'rocket.png',
     ]);
-
+    camera.viewfinder.anchor = Anchor.topLeft;
     initializeGame(loadHud: true);
+    camera.viewport =
+        FixedResolutionViewport(resolution: Vector2.all(canvasSize.x));
+
+    generatePipesPeriodically();
   }
 
   @override
   Color backgroundColor() {
     return const Color.fromARGB(255, 173, 223, 247);
   }
+/*----------------tocando--------------- */
+
+  void generatePipesPeriodically() {
+    // Llama a la función para generar tuberías cada 3 segundos
+    generatePipe();
+    Future.delayed(Duration(seconds: 3), generatePipesPeriodically);
+  }
+
+  void generatePipe() {
+    // Calcular la posición y de la tubería superior en el borde superior de la cámara
+    final double topPipeY = 0;
+
+    // Calcular la altura de la tubería superior de manera aleatoria
+    final double randomTopPipeHeight =
+        Random().nextDouble() * (canvasSize.y - Pipe.pipeGap);
+
+    // Calcular la posición y de la tubería inferior con un pequeño desplazamiento más abajo del borde inferior de la cámara
+    final double bottomPipeY = canvasSize.y - Pipe.pipeGap;
+
+    // Calcular la altura de la tubería inferior de manera aleatoria
+    final double randomBottomPipeHeight = Random().nextDouble() *
+        (canvasSize.y - topPipeY - Pipe.pipeGap - randomTopPipeHeight);
+
+    final Pipe topPipe =
+        Pipe((canvasSize.x / 2), topPipeY, height: randomTopPipeHeight);
+    final Pipe bottomPipe =
+        Pipe((canvasSize.x / 2), bottomPipeY, height: randomBottomPipeHeight);
+
+    world.add(topPipe);
+    world.add(bottomPipe);
+
+    // Configurar un temporizador para eliminar las tuberías después de cierto tiempo
+    Future.delayed(Duration(seconds: 5), () {
+      world.remove(topPipe);
+      world.remove(bottomPipe);
+    });
+  }
+
+  /*----------------tocando ------------------------------*/
 
   void reset() {
     initializeGame(loadHud: false);
@@ -46,12 +92,7 @@ class FtGame extends FlameGame
     // Initialize websocket
     initializeWebSocket();
   }
-
-  void initializeWebSocket() {
-    websocket = WebSocketsHandler();
-    websocket.connectToServer("localhost", 8888, serverMessageHandler);
-  }
-  /*
+/*
   @override
   void update(double deltaTime) {
     super.update(deltaTime);
@@ -63,6 +104,11 @@ class FtGame extends FlameGame
     camera.moveBy(movement);
   }
   */
+
+  void initializeWebSocket() {
+    websocket = WebSocketsHandler();
+    websocket.connectToServer("localhost", 8888, serverMessageHandler);
+  }
 
   void serverMessageHandler(String message) {
     if (kDebugMode) {
@@ -76,6 +122,7 @@ class FtGame extends FlameGame
     if (data is Map<String, dynamic>) {
       if (data['type'] == 'welcome') {
         initPlayer(data['id'].toString());
+        //generatePipe();
       }
       if (data['type'] == 'data') {
         var value = data['value'];
