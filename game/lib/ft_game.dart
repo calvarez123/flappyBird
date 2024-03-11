@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cupertino_base/pipe.dart';
 import 'package:flame/camera.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -34,8 +35,6 @@ class FtGame extends FlameGame
     ]);
     camera.viewfinder.anchor = Anchor.topLeft;
     initializeGame(loadHud: true);
-    camera.viewport =
-        FixedResolutionViewport(resolution: Vector2.all(canvasSize.x));
 
     generatePipesPeriodically();
   }

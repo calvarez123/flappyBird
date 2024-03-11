@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:cupertino_base/pipe.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'ft_game.dart';
@@ -81,7 +83,10 @@ class FtPlayer extends SpriteComponent
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is FtPlayer) {
+    if (other is Pipe) {
+      print(intersectionPoints);
+      print(other);
+      print('lo toque PLAYER');
       return;
     }
 
