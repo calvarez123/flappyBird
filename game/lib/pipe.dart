@@ -1,3 +1,5 @@
+import 'package:cupertino_base/ft_game.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
@@ -21,18 +23,10 @@ class Pipe extends PositionComponent {
           size: Vector2(pipeWidth, height),
         );
 
-  
   @override
   void render(Canvas c) {
     super.render(c);
     c.drawRect(toRect(), pipePaint);
-  }
-  override
-  Future<void> onLoad() async {
-    priority = 1; // Dibuixar-lo per sobre de tot
-    sprite = await Sprite.load('player.png');
-    size = Vector2.all(64);
-    add(CircleHitbox());
   }
 
   @override
