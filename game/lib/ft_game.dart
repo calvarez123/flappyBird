@@ -93,14 +93,6 @@ class FtGame extends FlameGame
     });
   }
 
-@override
-  void update(double dt) {
-    super.update(dt);
-
-    // Verifica las colisiones del jugador con los tubos
-    _player?.checkCollisions(pipes);
-  }
-}
   /*----------------tocando ------------------------------*/
 
   void reset() {

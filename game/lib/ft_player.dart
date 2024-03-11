@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:cupertino_base/pipe.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
@@ -100,16 +99,5 @@ class FtPlayer extends SpriteComponent
 
     // Renderitzar el sprite amb el Paint personalitzat
     sprite?.render(canvas, size: size, overridePaint: paint);
-  }
-
-  void checkCollisions(List<Pipe> pipes) {
-    Rect playerRect = toRect();
-
-    for (var pipe in pipes) {
-      if (pipe.checkCollision(playerRect)) {
-        print('¡Se han tocado!');
-        // Aquí puedes realizar otras acciones, como mostrar un mensaje en la pantalla
-      }
-    }
   }
 }
