@@ -53,19 +53,30 @@ class FtGame extends FlameGame
   }
 
   void generatePipe() {
-    // Calcular la posición y de la tubería superior en el borde superior de la cámara
+    // Definir el rango mínimo y máximo para la altura de las tuberías
+    final double minHeight = 50; // Altura mínima de la tubería
+    final double maxHeight = canvasSize.y - 200; // Altura máxima de la tubería
+
+    // Calcular la altura de la tubería superior de manera aleatoria dentro del rango
+    final double randomTopPipeHeight =
+        minHeight + Random().nextDouble() * (maxHeight - minHeight);
+
+    // Calcular la posición y de la tubería superior
     final double topPipeY = 0;
 
-    // Calcular la altura de la tubería superior de manera aleatoria
-    final double randomTopPipeHeight =
-        Random().nextDouble() * (canvasSize.y - Pipe.pipeGap);
+    // Calcular la posición y de la tubería inferior justo debajo de la superior
+    final double bottomPipeY = randomTopPipeHeight;
 
-    // Calcular la posición y de la tubería inferior con un pequeño desplazamiento más abajo del borde inferior de la cámara
-    final double bottomPipeY = canvasSize.y - Pipe.pipeGap;
+    // Definir un rango mínimo y máximo para la altura de la tubería inferior
+    final double minBottomPipeHeight =
+        50; // Altura mínima de la tubería inferior
+    final double maxBottomPipeHeight = canvasSize.y -
+        bottomPipeY -
+        100; // Altura máxima de la tubería inferior
 
-    // Calcular la altura de la tubería inferior de manera aleatoria
-    final double randomBottomPipeHeight = Random().nextDouble() *
-        (canvasSize.y - topPipeY - Pipe.pipeGap - randomTopPipeHeight);
+    // Calcular la altura de la tubería inferior de manera aleatoria dentro del rango
+    final double randomBottomPipeHeight = minBottomPipeHeight +
+        Random().nextDouble() * (maxBottomPipeHeight - minBottomPipeHeight);
 
     final Pipe topPipe =
         Pipe((canvasSize.x / 2), topPipeY, height: randomTopPipeHeight);
@@ -82,6 +93,14 @@ class FtGame extends FlameGame
     });
   }
 
+@override
+  void update(double dt) {
+    super.update(dt);
+
+    // Verifica las colisiones del jugador con los tubos
+    _player?.checkCollisions(pipes);
+  }
+}
   /*----------------tocando ------------------------------*/
 
   void reset() {
@@ -92,18 +111,6 @@ class FtGame extends FlameGame
     // Initialize websocket
     initializeWebSocket();
   }
-/*
-  @override
-  void update(double deltaTime) {
-    super.update(deltaTime);
-
-    // Mover la cámara hacia la derecha
-    double displacement =
-        100 * deltaTime; // Ajusta la velocidad según tu necesidad
-    Vector2 movement = Vector2(displacement, 0);
-    camera.moveBy(movement);
-  }
-  */
 
   void initializeWebSocket() {
     websocket = WebSocketsHandler();

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cupertino_base/pipe.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +19,7 @@ class FtPlayer extends SpriteComponent
   int previousHorizontalDirection = 0;
   int previousVerticalDirection = 0;
 
-  final double moveSpeed = 200;
+  final double moveSpeed = 400;
   int horizontalDirection = 0;
   int verticalDirection = 0;
 
@@ -55,14 +56,21 @@ class FtPlayer extends SpriteComponent
 
   @override
   void update(double dt) {
-    center.add(Vector2(horizontalDirection * moveSpeed * dt,
-        verticalDirection * moveSpeed * dt));
+    // Movimiento horizontal con las flechas
+    center.add(Vector2(horizontalDirection * moveSpeed * dt, 0));
 
+    // Movimiento vertical con las flechas
+    center.add(Vector2(0, verticalDirection * moveSpeed * dt));
+
+    // Movimiento hacia abajo constante
+    center.add(Vector2(0, 100 * dt));
+
+    // Actualizar la posición solo si ha habido cambios
     Vector2 newPosition = center.clone();
     if (newPosition != previousPosition ||
         horizontalDirection != previousHorizontalDirection ||
         verticalDirection != previousVerticalDirection) {
-      // Enviar les dades al servidor, només si s'han produït canvis
+      // Enviar los datos al servidor, solo si ha habido cambios
       game.websocket.sendMessage(
           '{"type": "move", "x": ${position.x}, "y": ${position.y}, "horizontalDirection": $horizontalDirection, "verticalDirection": $verticalDirection}');
 
@@ -92,5 +100,16 @@ class FtPlayer extends SpriteComponent
 
     // Renderitzar el sprite amb el Paint personalitzat
     sprite?.render(canvas, size: size, overridePaint: paint);
+  }
+
+  void checkCollisions(List<Pipe> pipes) {
+    Rect playerRect = toRect();
+
+    for (var pipe in pipes) {
+      if (pipe.checkCollision(playerRect)) {
+        print('¡Se han tocado!');
+        // Aquí puedes realizar otras acciones, como mostrar un mensaje en la pantalla
+      }
+    }
   }
 }
