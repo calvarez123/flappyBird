@@ -1,56 +1,44 @@
-import 'package:cupertino_base/ft_game.dart';
-import 'package:cupertino_base/ft_player.dart';
-import 'package:flame/collisions.dart';
+import 'dart:math';
 import 'package:flame/components.dart';
-import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-import 'dart:math';
+class Pipe extends PositionComponent {
+  static const double defaultWidth = 90.0; // Ancho predeterminado de la tubería
+  static const double minHeight = 100.0; // Altura mínima de la tubería
+  static const double maxHeight = 450.0; // Altura máxima de la tubería
+  final double height; // Altura de la tubería
+  static const double speed = 100.0; // Velocidad de movimiento de la tubería
 
-class Pipe extends PositionComponent
-    with HasGameRef<FtGame>, CollisionCallbacks {
-  static const double pipeWidth = 100.0;
-  static const double pipeSpeed = 100.0;
-
-  final Paint pipePaint;
-  final double pipeHeight;
-
-  Pipe(double x, double y, {required double height})
-      : pipePaint = Paint()..color = Colors.green,
-        pipeHeight = height,
-        super(
-          position: Vector2(x, y),
-          size: Vector2(pipeWidth, height),
-        ) {
+  Pipe({required this.height, required double x, required double y}) {
+    width = defaultWidth;
+    this.height = height;
+    this.x = x;
+    this.y = y;
     debugMode = true;
+  }
+
+  factory Pipe.randomHeight({required double x, required double y}) {
+    final randomHeight =
+        Random().nextDouble() * (maxHeight - minHeight) + minHeight;
+    return Pipe(height: randomHeight, x: x, y: y);
   }
 
   @override
   void render(Canvas c) {
     super.render(c);
-    c.drawRect(toRect(), pipePaint);
-    // Dibujar la hitbox en rojo
-    final hitboxPaint = Paint()
-      ..color = Colors.red.withOpacity(0.5) // Color rojo con opacidad
-      ..style = PaintingStyle.stroke // Estilo de trazo
-      ..strokeWidth = 2; // Grosor del trazo
-
-    c.drawRect(toRect(), hitboxPaint);
-  }
-
-  @override
-  Future<void> onLoad() async {
-    RectangleHitbox().removeFromParent();
-    add(RectangleHitbox());
-    RectangleHitbox().paint;
+    // Dibujar el cuadrado verde
+    c.drawRect(
+        Rect.fromLTWH(x, y, width, height),
+        Paint()
+          ..color = Colors.green
+          ..style = PaintingStyle.fill);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    RectangleHitbox().removeFromParent();
-
-    this.x -= pipeSpeed * dt;
-    add(RectangleHitbox());
+    // Mover la tubería hacia la derecha
+    x -= speed *
+        dt; // dt es el tiempo transcurrido desde el último frame, lo que asegura un movimiento suave independientemente de la velocidad de actualización
   }
 }

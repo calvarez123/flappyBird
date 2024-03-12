@@ -32,6 +32,8 @@ class FtPlayer extends SpriteComponent
     priority = 1; // Dibuixar-lo per sobre de tot
     sprite = await Sprite.load('player.png');
     size = Vector2.all(64);
+    x = -400;
+    y = 0;
     add(CircleHitbox());
   }
 
@@ -87,8 +89,9 @@ class FtPlayer extends SpriteComponent
   @override
   void onCollisionStart(Set<Vector2> _, PositionComponent other) {
     super.onCollisionStart(_, other);
+
     //game.pauseEngine();
-    print('toque');
+    print('melotoco');
   }
 
   @override

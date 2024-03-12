@@ -17,25 +17,33 @@ import 'utils_websockets.dart';
 class FtGame extends FlameGame
     with HasCollisionDetection, HasKeyboardHandlerComponents {
   Timer? pipeTimer;
-  FtGame() {}
+  FtGame() {
+    //debugMode = true;
+  }
 
   late WebSocketsHandler websocket;
   FtPlayer? _player;
   final List<FtOpponent> _opponents = [];
-  List<Pipe> pipes = [];
+
+  int points = 0;
+  TextComponent pointsText = TextComponent();
 
   DateTime? lastUpdateTime;
   double serverUpdateInterval = 0; // En segons
 
   @override
   Future<void> onLoad() async {
-    //debugMode = true; // Uncomment to see the bounding boxes
+    debugMode = true; // Uncomment to see the bounding boxes
     await images.loadAll([
       'player.png',
       'rocket.png',
     ]);
-    camera.viewfinder.anchor = Anchor.topLeft;
+
     initializeGame(loadHud: true);
+    // Configuración del componente de texto
+    pointsText.text = '0'; // Inicializar el texto con '0'
+
+    // Configurar temporizador para aumentar los puntos cada segundo
 
     generatePipesPeriodically();
   }
@@ -54,45 +62,21 @@ class FtGame extends FlameGame
   }
 
   void generatePipe() {
-    // Definir el rango mínimo y máximo para la altura de las tuberías
-    final double minHeight = 50; // Altura mínima de la tubería
-    final double maxHeight = canvasSize.y - 200; // Altura máxima de la tubería
+    double xPosition = 535; // Cambia estas coordenadas según sea necesario
+    double yPosition = -345; // Cambia estas coordenadas según sea necesario
 
-    // Calcular la altura de la tubería superior de manera aleatoria dentro del rango
-    final double randomTopPipeHeight =
-        minHeight + Random().nextDouble() * (maxHeight - minHeight);
-
-    // Calcular la posición y de la tubería superior
-    final double topPipeY = 0;
-
-    // Calcular la posición y de la tubería inferior justo debajo de la superior
-    final double bottomPipeY = randomTopPipeHeight;
-
-    // Definir un rango mínimo y máximo para la altura de la tubería inferior
-    final double minBottomPipeHeight =
-        50; // Altura mínima de la tubería inferior
-    final double maxBottomPipeHeight = canvasSize.y -
-        bottomPipeY -
-        100; // Altura máxima de la tubería inferior
-
-    // Calcular la altura de la tubería inferior de manera aleatoria dentro del rango
-    final double randomBottomPipeHeight = minBottomPipeHeight +
-        Random().nextDouble() * (maxBottomPipeHeight - minBottomPipeHeight);
-
-    final Pipe topPipe =
-        Pipe((canvasSize.x / 2), topPipeY, height: randomTopPipeHeight);
-    final Pipe bottomPipe =
-        Pipe((canvasSize.x / 2), bottomPipeY, height: randomBottomPipeHeight);
-
+    Pipe topPipe = Pipe.randomHeight(x: xPosition, y: yPosition);
+    topPipe.add(RectangleHitbox());
     world.add(topPipe);
-    //world.add(bottomPipe);
-    pipes.add(topPipe);
-    //pipes.add(bottomPipe);
-
+    double aleatoriaY = Random().nextDouble() * (250 - 180) + 180;
+    ;
+    Pipe botPipe = Pipe.randomHeight(x: 561, y: aleatoriaY);
+    botPipe.add(RectangleHitbox());
+    world.add(botPipe);
     // Configurar un temporizador para eliminar las tuberías después de cierto tiempo
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(Duration(seconds: 15), () {
       world.remove(topPipe);
-      //world.remove(bottomPipe);
+      world.remove(botPipe);
     });
   }
 
