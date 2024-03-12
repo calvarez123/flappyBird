@@ -22,6 +22,7 @@ class FtGame extends FlameGame
   late WebSocketsHandler websocket;
   FtPlayer? _player;
   final List<FtOpponent> _opponents = [];
+  List<Pipe> pipes = [];
 
   DateTime? lastUpdateTime;
   double serverUpdateInterval = 0; // En segons
@@ -41,7 +42,8 @@ class FtGame extends FlameGame
 
   @override
   Color backgroundColor() {
-    return const Color.fromARGB(255, 173, 223, 247);
+    return Color.fromRGBO(173, 223, 247,
+        0.5); // 0.5 representa el nivel de transparencia, puedes ajustarlo según sea necesario
   }
 /*----------------tocando--------------- */
 
@@ -83,12 +85,14 @@ class FtGame extends FlameGame
         Pipe((canvasSize.x / 2), bottomPipeY, height: randomBottomPipeHeight);
 
     world.add(topPipe);
-    world.add(bottomPipe);
+    //world.add(bottomPipe);
+    pipes.add(topPipe);
+    //pipes.add(bottomPipe);
 
     // Configurar un temporizador para eliminar las tuberías después de cierto tiempo
     Future.delayed(Duration(seconds: 5), () {
       world.remove(topPipe);
-      world.remove(bottomPipe);
+      //world.remove(bottomPipe);
     });
   }
 

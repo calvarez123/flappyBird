@@ -1,8 +1,11 @@
+// ignore_for_file: must_call_super
+
 import 'dart:ui';
 
 import 'package:cupertino_base/pipe.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -82,15 +85,10 @@ class FtPlayer extends SpriteComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Pipe) {
-      print(intersectionPoints);
-      print(other);
-      print('lo toque PLAYER');
-      return;
-    }
-
-    super.onCollision(intersectionPoints, other);
+  void onCollisionStart(Set<Vector2> _, PositionComponent other) {
+    super.onCollisionStart(_, other);
+    //game.pauseEngine();
+    print('toque');
   }
 
   @override
@@ -104,5 +102,12 @@ class FtPlayer extends SpriteComponent
 
     // Renderitzar el sprite amb el Paint personalitzat
     sprite?.render(canvas, size: size, overridePaint: paint);
+    // Dibujar la hitbox en azul
+    final hitboxPaint = Paint()
+      ..color = Colors.blue.withOpacity(0.5) // Color azul con opacidad
+      ..style = PaintingStyle.stroke // Estilo de trazo
+      ..strokeWidth = 2; // Grosor del trazo
+
+    canvas.drawCircle(Offset(size.x / 2, size.y / 2), size.x / 2, hitboxPaint);
   }
 }
