@@ -30,7 +30,7 @@ class Pipe extends PositionComponent {
     c.drawRect(
         Rect.fromLTWH(x, y, width, height),
         Paint()
-          ..color = Colors.green
+          ..color = Color.fromRGBO(173, 223, 247, 0.5)
           ..style = PaintingStyle.fill);
   }
 

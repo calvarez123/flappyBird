@@ -25,8 +25,8 @@ class FtGame extends FlameGame
   FtPlayer? _player;
   final List<FtOpponent> _opponents = [];
 
-  int points = 0;
-  TextComponent pointsText = TextComponent();
+  //int points = 0;
+  //TextComponent pointsText = TextComponent();
 
   DateTime? lastUpdateTime;
   double serverUpdateInterval = 0; // En segons
@@ -41,7 +41,7 @@ class FtGame extends FlameGame
 
     initializeGame(loadHud: true);
     // Configuración del componente de texto
-    pointsText.text = '0'; // Inicializar el texto con '0'
+    //pointsText.text = '0'; // Inicializar el texto con '0'
 
     // Configurar temporizador para aumentar los puntos cada segundo
 
@@ -51,7 +51,7 @@ class FtGame extends FlameGame
   @override
   Color backgroundColor() {
     return Color.fromRGBO(173, 223, 247,
-        0.5); // 0.5 representa el nivel de transparencia, puedes ajustarlo según sea necesario
+        23); // 0.5 representa el nivel de transparencia, puedes ajustarlo según sea necesario
   }
 /*----------------tocando--------------- */
 
@@ -63,14 +63,14 @@ class FtGame extends FlameGame
 
   void generatePipe() {
     double xPosition = 535; // Cambia estas coordenadas según sea necesario
-    double yPosition = -345; // Cambia estas coordenadas según sea necesario
+    double yPosition = -360; // Cambia estas coordenadas según sea necesario
 
     Pipe topPipe = Pipe.randomHeight(x: xPosition, y: yPosition);
     topPipe.add(RectangleHitbox());
     world.add(topPipe);
     double aleatoriaY = Random().nextDouble() * (250 - 180) + 180;
     ;
-    Pipe botPipe = Pipe.randomHeight(x: 561, y: aleatoriaY);
+    Pipe botPipe = Pipe.randomHeight(x: 561, y: topPipe.height - 170);
     botPipe.add(RectangleHitbox());
     world.add(botPipe);
     // Configurar un temporizador para eliminar las tuberías después de cierto tiempo

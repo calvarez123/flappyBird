@@ -90,7 +90,7 @@ class FtPlayer extends SpriteComponent
   void onCollisionStart(Set<Vector2> _, PositionComponent other) {
     super.onCollisionStart(_, other);
 
-    //game.pauseEngine();
+    game.pauseEngine();
     print('melotoco');
   }
 
