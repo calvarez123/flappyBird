@@ -63,14 +63,14 @@ class FtGame extends FlameGame
 
   void generatePipe() {
     double xPosition = 535; // Cambia estas coordenadas según sea necesario
-    double yPosition = -360; // Cambia estas coordenadas según sea necesario
+    double yPosition = -300; // Cambia estas coordenadas según sea necesario
 
     Pipe topPipe = Pipe.randomHeight(x: xPosition, y: yPosition);
     topPipe.add(RectangleHitbox());
     world.add(topPipe);
-    double aleatoriaY = Random().nextDouble() * (250 - 180) + 180;
+    double aleatoriaY = Random().nextDouble() * (250 - 180);
     ;
-    Pipe botPipe = Pipe.randomHeight(x: 561, y: topPipe.height - 170);
+    Pipe botPipe = Pipe.randomHeight(x: 561, y: topPipe.height - aleatoriaY);
     botPipe.add(RectangleHitbox());
     world.add(botPipe);
     // Configurar un temporizador para eliminar las tuberías después de cierto tiempo

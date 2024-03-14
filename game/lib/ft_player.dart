@@ -30,7 +30,7 @@ class FtPlayer extends SpriteComponent
   @override
   Future<void> onLoad() async {
     priority = 1; // Dibuixar-lo per sobre de tot
-    sprite = await Sprite.load('player.png');
+    sprite = await Sprite.load('bird_midflap.png');
     size = Vector2.all(64);
     x = -400;
     y = 0;
