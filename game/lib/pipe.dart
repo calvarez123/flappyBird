@@ -14,12 +14,11 @@ class Pipe extends SpriteComponent {
       : super(size: Vector2(defaultWidth, height), anchor: Anchor.center) {
     this.x = x;
     this.y = y;
-    debugMode = true;
   }
 
   @override
   Future<void> onLoad() async {
-    priority = 1; // Dibujar-lo per sobre de tot
+    priority = 0; // Dibujar-lo per sobre de tot
     sprite = await Sprite.load('pipe.png');
   }
 

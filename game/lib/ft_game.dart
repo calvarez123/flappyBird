@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:cupertino_base/fondo.dart';
 import 'package:cupertino_base/pipe.dart';
+import 'package:cupertino_base/puntos.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -24,6 +26,8 @@ class FtGame extends FlameGame
   late WebSocketsHandler websocket;
   FtPlayer? _player;
   final List<FtOpponent> _opponents = [];
+  late PuntosTexto puntosTexto;
+  int numero = 0;
 
   //int points = 0;
   //TextComponent pointsText = TextComponent();
@@ -44,8 +48,14 @@ class FtGame extends FlameGame
     //pointsText.text = '0'; // Inicializar el texto con '0'
 
     // Configurar temporizador para aumentar los puntos cada segundo
+    puntosTexto = PuntosTexto(Vector2(10, 10));
+    add(puntosTexto);
 
     generatePipesPeriodically();
+  }
+
+  void actualizarPuntos(int puntos) {
+    puntosTexto.actualizarPuntos(puntos);
   }
 
   @override
@@ -72,9 +82,13 @@ class FtGame extends FlameGame
     ;
     Pipe botPipe = Pipe.randomHeight(x: 561, y: topPipe.height - aleatoriaY);
     botPipe.add(RectangleHitbox());
+
     world.add(botPipe);
+
     // Configurar un temporizador para eliminar las tuberías después de cierto tiempo
-    Future.delayed(Duration(seconds: 15), () {
+    Future.delayed(Duration(seconds: 12), () {
+      numero += 1;
+      actualizarPuntos(numero);
       world.remove(topPipe);
       world.remove(botPipe);
     });
