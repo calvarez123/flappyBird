@@ -132,7 +132,17 @@ class FtGame extends FlameGame
   }
 
   void gameover() {
+    // Eliminar al jugador del mundo
+
+    _player?.updatePosition(Vector2(500, 500));
     this.overlays.add('gameover');
+  }
+
+  void _removePlayer() {
+    if (_player != null) {
+      world.remove(_player!);
+      _player = null;
+    }
   }
 
   void initPlayer(String id) {

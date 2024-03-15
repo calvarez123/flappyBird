@@ -36,6 +36,11 @@ class FtPlayer extends SpriteComponent
     add(CircleHitbox());
   }
 
+  // Método para actualizar la posición del jugador
+  void updatePosition(Vector2 newPosition) {
+    position.setFrom(newPosition);
+  }
+
   @override
   bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalDirection = 0;
@@ -80,8 +85,9 @@ class FtPlayer extends SpriteComponent
   void onCollisionStart(Set<Vector2> _, PositionComponent other) {
     super.onCollisionStart(_, other);
     if (other is Pipe) {
-      game.pauseEngine();
       game.gameover();
+      game.pauseEngine();
+
       print('melotoco');
     }
   }

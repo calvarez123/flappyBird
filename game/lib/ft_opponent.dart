@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'ft_game.dart';
 
 class FtOpponent extends SpriteComponent with HasGameReference<FtGame> {
@@ -11,12 +12,13 @@ class FtOpponent extends SpriteComponent with HasGameReference<FtGame> {
   String id = "";
   String color = "";
 
-  Vector2 targetPosition = Vector2.zero(); // Posició objectiu (la del servidor)
-  double interpolationSpeed = 10; // Velocitat d'interpolació
+  Vector2 targetPosition =
+      Vector2.zero(); // Posición objetivo (la del servidor)
+  double interpolationSpeed = 10; // Velocidad de interpolación
 
   @override
   Future<void> onLoad() async {
-    priority = 0; // Dibuixar-lo per sota del player
+    priority = 0; // Dibujar por debajo del jugador
     await _loadSprite(); // Cargar el sprite usando el nombre del color
     size = Vector2.all(64);
     add(CircleHitbox());
@@ -30,10 +32,10 @@ class FtOpponent extends SpriteComponent with HasGameReference<FtGame> {
 
   @override
   void update(double dt) {
-    // Defineix un factor d'interpolació. Per exemple, 0.1 per un 10% del camí per frame
+    // Define un factor de interpolación. Por ejemplo, 0.1 para un 10% del camino por fotograma
     double lerpFactor = interpolationSpeed * dt;
 
-    // Calcula la nova posició com una interpolació lineal entre la posició actual i la targetPosition
+    // Calcula la nueva posición como una interpolación lineal entre la posición actual y la targetPosition
     position =
         position + (targetPosition - position) * lerpFactor.clamp(0.0, 1.0);
 
@@ -43,10 +45,13 @@ class FtOpponent extends SpriteComponent with HasGameReference<FtGame> {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    // Preparar el Paint amb color i opacitat
-    final paint = Paint()..filterQuality = FilterQuality.high;
+    // Preparar el Paint con color y opacidad
+    final paint = Paint()
+      ..filterQuality = FilterQuality.high
+      ..colorFilter = ColorFilter.mode(Colors.white.withOpacity(0.5),
+          BlendMode.srcOver); // Ajustar la opacidad aquí
 
-    // Renderitzar el sprite amb el Paint personalitzat
+    // Renderizar el sprite con el Paint personalizado
     sprite?.render(canvas, size: size, overridePaint: paint);
   }
 }
