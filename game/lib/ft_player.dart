@@ -91,6 +91,7 @@ class FtPlayer extends SpriteComponent
     super.onCollisionStart(_, other);
     if (other is Pipe) {
       game.pauseEngine();
+      game.gameover();
       print('melotoco');
     }
   }

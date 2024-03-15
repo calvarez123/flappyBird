@@ -9,6 +9,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,6 @@ import 'utils_websockets.dart';
 
 class FtGame extends FlameGame
     with HasCollisionDetection, HasKeyboardHandlerComponents {
-  Timer? pipeTimer;
   FtGame() {
     //debugMode = true;
   }
@@ -28,9 +28,6 @@ class FtGame extends FlameGame
   final List<FtOpponent> _opponents = [];
   late PuntosTexto puntosTexto;
   int numero = 0;
-
-  //int points = 0;
-  //TextComponent pointsText = TextComponent();
 
   DateTime? lastUpdateTime;
   double serverUpdateInterval = 0; // En segons
@@ -48,6 +45,7 @@ class FtGame extends FlameGame
     //pointsText.text = '0'; // Inicializar el texto con '0'
 
     // Configurar temporizador para aumentar los puntos cada segundo
+
     puntosTexto = PuntosTexto(Vector2(10, 10));
     add(puntosTexto);
 
@@ -131,6 +129,10 @@ class FtGame extends FlameGame
         }
       }
     }
+  }
+
+  void gameover() {
+    this.overlays.add('gameover');
   }
 
   void initPlayer(String id) {

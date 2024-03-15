@@ -1,3 +1,4 @@
+import 'package:cupertino_base/gameover.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -22,6 +23,7 @@ class AppState extends State<App> {
       gameFactory: FtGame.new,
       overlayBuilderMap: {
         'MainOverlay': (_, game) => FtMainOverlay(game: game),
+        'gameover': (_, game) => GameoverScreen(game: game),
       },
       initialActiveOverlays: const ['MainOverlay'],
     );

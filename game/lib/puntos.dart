@@ -6,7 +6,16 @@ import 'package:flutter/painting.dart';
 
 class PuntosTexto extends TextComponent with HasGameRef<FtGame> {
   PuntosTexto(Vector2 position)
-      : super(text: 'Puntos: 0', priority: 3, position: position);
+      : super(
+            text: 'Puntos: 0',
+            priority: 3,
+            position: position,
+            textRenderer: TextPaint(
+                style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Game',
+                    color: Colors.black)));
 
   void actualizarPuntos(int puntos) {
     this.text =

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class Fondo extends SpriteComponent {
-  Fondo(Size size) {
+  Fondo(Size size, {required Vector2}) {
     this.width = size.width;
     this.height = size.height;
     // Reemplaza 'suelo_sprite.png' con el nombre de tu sprite de suelo

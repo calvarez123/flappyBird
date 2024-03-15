@@ -71,6 +71,12 @@ flutter:
   assets:
     - assets/data/
     - assets/images/
+    - assets/images/gameover.png
+
+  fonts:
+     - family: Game
+       fonts:
+         - asset: assets/fonts/Game.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
