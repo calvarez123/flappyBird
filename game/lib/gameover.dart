@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cupertino_base/ft_game.dart';
+import 'package:cupertino_base/waitingRoom.dart';
 import 'package:flutter/material.dart';
 
 class GameoverScreen extends StatelessWidget {
@@ -30,7 +31,12 @@ class GameoverScreen extends StatelessWidget {
             Image(image: FileImage(File('assets/images/gameover.png'))),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WaitingRoomScreen()),
+                );
+              },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
               child: const Text(
                 'Restart',
@@ -41,7 +47,7 @@ class GameoverScreen extends StatelessWidget {
             Container(
               color: Colors.orange, // Color de fondo para la ListView
               padding:
-                  EdgeInsets.all(10), // Añadir espacio alrededor de la ListView
+              EdgeInsets.all(10), // Añadir espacio alrededor de la ListView
               child: Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,

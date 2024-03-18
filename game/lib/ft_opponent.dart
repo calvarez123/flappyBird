@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'ft_game.dart';
 
 class FtOpponent extends SpriteComponent with HasGameReference<FtGame> {
-  FtOpponent({required this.id, required super.position, required this.color})
+  FtOpponent({required this.id, required super.position, required this.img})
       : super(size: Vector2.all(64), anchor: Anchor.center);
 
   String id = "";
-  String color = "";
+  String img = "";
 
   Vector2 targetPosition =
       Vector2.zero(); // Posición objetivo (la del servidor)
@@ -26,7 +26,7 @@ class FtOpponent extends SpriteComponent with HasGameReference<FtGame> {
 
   Future<void> _loadSprite() async {
     // Construir la ruta del asset utilizando el nombre del color
-    String assetPath = '$color.png';
+    String assetPath = '$img.png';
     sprite = await Sprite.load(assetPath); // Cargar el sprite
   }
 

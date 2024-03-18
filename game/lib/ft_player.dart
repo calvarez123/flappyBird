@@ -11,11 +11,11 @@ import 'ft_game.dart';
 
 class FtPlayer extends SpriteComponent
     with KeyboardHandler, CollisionCallbacks, HasGameReference<FtGame> {
-  FtPlayer({required this.id, required this.color, required super.position})
+  FtPlayer({required this.id, required this.img, required super.position})
       : super(size: Vector2(10, 10), anchor: Anchor.center);
 
   String id = "";
-  String color; // Nuevo parámetro color
+  String img; // Nuevo parámetro color
 
   Vector2 previousPosition = Vector2.zero();
   int previousHorizontalDirection = 0;
@@ -28,8 +28,9 @@ class FtPlayer extends SpriteComponent
   @override
   Future<void> onLoad() async {
     priority = 1;
+    print(img);
     sprite = await Sprite.load(
-        '$color.png'); // Usar el parámetro color para cargar el sprite correspondiente
+        '$img.png'); // Usar el parámetro color para cargar el sprite correspondiente
     size = Vector2(60, 50);
     x = -400;
     y = 0;

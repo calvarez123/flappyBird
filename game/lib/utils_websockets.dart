@@ -1,3 +1,4 @@
+import 'package:cupertino_base/waitingRoom.dart';
 import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -10,8 +11,10 @@ enum ConnectionStatus {
 
 class WebSocketsHandler {
   late Function _callback;
-  String ip = "localhost";
-  String port = "8888";
+  String ip = UserSelect.IP;
+  String port = UserSelect.port;
+  //String ip = "localhost";
+  //String port = "8888";
 
   IOWebSocketChannel? _socketClient;
   ConnectionStatus connectionStatus = ConnectionStatus.disconnected;
@@ -33,7 +36,7 @@ class WebSocketsHandler {
 
     _socketClient = IOWebSocketChannel.connect("ws://$ip:$port");
     _socketClient!.stream.listen(
-      (message) {
+          (message) {
         if (connectionStatus != ConnectionStatus.connected) {
           connectionStatus = ConnectionStatus.connected;
         }

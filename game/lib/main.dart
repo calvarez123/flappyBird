@@ -1,10 +1,11 @@
 import 'dart:io' show Platform;
+import 'package:cupertino_base/waitingRoom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:window_manager/window_manager.dart';
 import 'app.dart';
+import 'waitingRoom.dart'; // Importa la pantalla de sala de espera
 
 void main() async {
-  // For Linux, macOS and Windows, initialize WindowManager
   try {
     if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
       WidgetsFlutterBinding.ensureInitialized();
@@ -12,17 +13,21 @@ void main() async {
       windowManager.waitUntilReadyToShow().then(showWindow);
     }
   } catch (e) {
-    // ignore: avoid_print
     print(e);
   }
 
-  // Define the app as a ChangeNotifierProvider
+  // Muestra la pantalla de sala de espera antes de la aplicación principal
   runApp(
-    const App(),
+    CupertinoApp(
+      home: WaitingRoomScreen(), // Muestra la pantalla de sala de espera
+      theme: CupertinoThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: CupertinoColors.white, // Fondo blanco
+      ),
+    ),
   );
 }
 
-// Show the window when it's ready
 void showWindow(_) async {
   windowManager.setMinimumSize(const Size(300.0, 600.0));
   await windowManager.setTitle('App');

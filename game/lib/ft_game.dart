@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:cupertino_base/fondo.dart';
 import 'package:cupertino_base/pipe.dart';
 import 'package:cupertino_base/puntos.dart';
+import 'package:cupertino_base/waitingRoom.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -119,7 +120,7 @@ class FtGame extends FlameGame
     // Comprovar si 'data' és un Map i si 'type' és igual a 'data'
     if (data is Map<String, dynamic>) {
       if (data['type'] == 'welcome') {
-        initPlayer(data['id'].toString());
+        initPlayer(data['id'].toString(),UserSelect.nom,UserSelect.img);
         //generatePipe();
       }
       if (data['type'] == 'data') {
@@ -145,31 +146,18 @@ class FtGame extends FlameGame
     }
   }
 
-  void initPlayer(String id) {
-    final List<String> randomNames = [
-      "Alice",
-      "Bob",
-      "Charlie",
-      "David",
-      "Eva",
-      "Frank",
-      "Grace",
-      "Hank",
-      "Ivy",
-      "Jack"
-    ];
-    final random = Random();
-    final randomName = randomNames[random.nextInt(randomNames.length)];
-    Color playerColor = getRandomColor();
+  void initPlayer(String id,String nom, String img) {
+
     _player = FtPlayer(
         id: id,
         position: Vector2((canvasSize.x / 2), (canvasSize.y / 2)),
-        color: 'negro');
+        img: img);
     world.add(_player as Component);
 
     websocket.sendMessage(
-        '{"type": "init", "name": "$randomName", "color": "${colorToHex(playerColor)}"}');
+        '{"type": "init", "name": "$nom", "img": "$img"}');
   }
+
 
   void updateOpponents(List<dynamic> opponentsData) {
     // Crea una llista amb els ID dels oponents actuals
@@ -214,7 +202,7 @@ class FtGame extends FlameGame
         var newOpponent = FtOpponent(
           id: id,
           position: Vector2(clientX, clientY),
-          color: 'negro',
+          img: UserSelect.img,
         );
         if (newOpponent.id != _player?.id) {
           _opponents.add(newOpponent);
