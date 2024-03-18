@@ -129,22 +129,24 @@ class FtGame extends FlameGame
           updateOpponents(value);
         }
       }
+      if (data['type'] == 'echar') {
+        for (var opponent in _opponents){
+          if (opponent.getID()==data['id'].toString()){
+            world.remove(opponent);
+          }
+        }
+      }
     }
   }
 
-  void gameover() {
+  void gameover(String id) {
     // Eliminar al jugador del mundo
-
+    world.remove(_player!);
+    websocket.sendMessage('{"type": "echar", "name": "$id" }');
     _player?.updatePosition(Vector2(500, 500));
     this.overlays.add('gameover');
   }
 
-  void _removePlayer() {
-    if (_player != null) {
-      world.remove(_player!);
-      _player = null;
-    }
-  }
 
   void initPlayer(String id,String nom, String img) {
 

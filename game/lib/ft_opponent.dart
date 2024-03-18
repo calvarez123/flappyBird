@@ -54,4 +54,8 @@ class FtOpponent extends SpriteComponent with HasGameReference<FtGame> {
     // Renderizar el sprite con el Paint personalizado
     sprite?.render(canvas, size: size, overridePaint: paint);
   }
+
+  String getID(){
+    return id;
+  }
 }

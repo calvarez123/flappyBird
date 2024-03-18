@@ -80,6 +80,16 @@ ws.onMessage = (socket, id, msg) => {
       clientData.x = obj.x
       clientData.y = obj.y
       break
+    case "end":
+      ws.broadcast(JSON.stringify({
+        type: "GameOver",
+        id: id
+    }))
+    case "echar":
+      ws.broadcast(JSON.stringify({
+        type: "echar",
+        id: id
+    }))
   }
 }
 
@@ -97,7 +107,6 @@ ws.onClose = (socket, id) => {
 gLoop.init();
 gLoop.run = (fps) => {
   // Aquest mètode s'intenta executar 30 cops per segon
-
   let clientsData = ws.getClientsData()
 
   // Gestionar aquí la partida, estats i final
