@@ -25,7 +25,7 @@ class FtGame extends FlameGame
     //debugMode = true;
   }
 
-  late WebSocketsHandler websocket;
+  static late WebSocketsHandler websocket;
   FtPlayer? _player;
   final List<FtOpponent> _opponents = [];
   late PuntosTexto puntosTexto;

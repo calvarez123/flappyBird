@@ -73,7 +73,7 @@ class FtPlayer extends SpriteComponent
     if (newPosition != previousPosition ||
         horizontalDirection != previousHorizontalDirection ||
         verticalDirection != previousVerticalDirection) {
-      game.websocket.sendMessage(
+      FtGame.websocket.sendMessage(
           '{"type": "move", "x": ${position.x}, "y": ${position.y}, "horizontalDirection": $horizontalDirection, "verticalDirection": $verticalDirection}');
 
       previousPosition.setFrom(newPosition);

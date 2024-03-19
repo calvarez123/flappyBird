@@ -1,7 +1,7 @@
-const express = require('express')
-const gameLoop = require('./utilsGameLoop.js')
-const webSockets = require('./utilsWebSockets.js')
-const debug = true
+const express = require('express');
+const gameLoop = require('./utilsGameLoop.js');
+const webSockets = require('./utilsWebSockets.js');
+const debug = true;
 
 /*
     WebSockets server, example of messages:
@@ -17,110 +17,121 @@ const debug = true
         - All clients data      { "type": "data", "data": "clientsData" }
 */
 
-var ws = new webSockets()
-var gLoop = new gameLoop()
-var ranking={}
+const ws = new webSockets();
+const gLoop = new gameLoop();
+const ranking = {};
+const id_nom={};
 // Start HTTP server
-const app = express()
-const port = process.env.PORT || 8888
+const app = express();
+const port = process.env.PORT || 8888;
 
 // Publish static files from 'public' folder
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 // Activate HTTP server
-const httpServer = app.listen(port, appListen)
+const httpServer = app.listen(port, appListen);
+
 async function appListen() {
-  console.log(`Listening for HTTP queries on: http://localhost:${port}`)
+  console.log(`Listening for HTTP queries on: http://localhost:${port}`);
 }
 
 // Close connections when process is killed
 process.on('SIGTERM', shutDown);
 process.on('SIGINT', shutDown);
+
 function shutDown() {
   console.log('Received kill signal, shutting down gracefully');
-  httpServer.close()
-  ws.end()
-  gLoop.stop()
+  httpServer.close();
+  ws.end();
+  gLoop.stop();
   process.exit(0);
 }
 
 // WebSockets
-ws.init(httpServer, port)
+ws.init(httpServer, port);
 
 ws.onConnection = (socket, id) => {
-  if (debug) console.log("WebSocket client connected: " + id)
+  if (debug) console.log("WebSocket client connected: " + id);
 
   // Saludem personalment al nou client
   socket.send(JSON.stringify({
     type: "welcome",
     value: "Welcome to the server",
     id: id
-  }))
-
+  }));
   // Enviem el nou client a tothom
   ws.broadcast(JSON.stringify({
     type: "newClient",
     id: id
-  }))
-}
+  }));
+};
 
 ws.onMessage = (socket, id, msg) => {
-  if (debug) console.log(`New message from ${id}:  ${msg.substring(0, 32)}...`)
+  if (debug) console.log(`New message from ${id}:  ${msg.substring(0, 32)}...`);
 
-  let clientData = ws.getClientData(id)
-  if (clientData == null) return
+  let clientData = ws.getClientData(id);
+  if (clientData == null) return;
 
-  let obj = JSON.parse(msg)
+  let obj = JSON.parse(msg);
   switch (obj.type) {
     case "init":
-      clientData.name = obj.name
-      clientData.color = obj.color
+      clientData.name = obj.name;
+      clientData.color = obj.color;
+      id_nom[id]=clientData.name;
       break;
     case "move":
-      clientData.x = obj.x
-      clientData.y = obj.y
-      break
+      clientData.x = obj.x;
+      clientData.y = obj.y;
+      break;
     case "end":
       ws.broadcast(JSON.stringify({
         type: "GameOver",
         id: id
-    }))
+      }));
     case "echar":
-      ws.broadcast(JSON.stringify({
+      // Expulsar al cliente y dejar de enviar datos
+      ws.broadcastExcept(JSON.stringify({
         type: "echar",
         id: id
-    }))
+      }), id);
+      break;
     case "ranking":
-      ranking[obj.nom]=obj.puntos
+      ranking[obj.nom] = obj.puntos;
       let dataObject = {
         "type": "ranking",
-        "data":ranking
+        "data": ranking
       };
-      
+
       let jsonString = JSON.stringify(dataObject);
-      ws.broadcast(jsonString)
+      ws.broadcast(jsonString);
   }
-}
+};
 
 ws.onClose = (socket, id) => {
-  if (debug) console.log("WebSocket client disconnected: " + id)
+  if (debug) console.log("WebSocket client disconnected: " + id);
+
+  // Eliminar al jugador del ranking
+  delete ranking[id_nom[id]];
 
   // Informem a tothom que el client s'ha desconnectat
   ws.broadcast(JSON.stringify({
     type: "disconnected",
     from: "server",
     id: id
-  }))
-}
+  }));
+};
 
 gLoop.init();
 gLoop.run = (fps) => {
   // Aquest mètode s'intenta executar 30 cops per segon
-  let clientsData = ws.getClientsData()
+  let clientsData = ws.getClientsData();
 
   // Gestionar aquí la partida, estats i final
   //console.log(clientsData)
 
   // Send game status data to everyone
-  ws.broadcast(JSON.stringify({ type: "data", value: clientsData }))
-}
+  ws.broadcast(JSON.stringify({
+    type: "data",
+    value: clientsData
+  }));
+};

@@ -29,6 +29,7 @@ class _GameoverScreenState extends State<GameoverScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
+                FtGame.websocket.disconnectFromServer();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => WaitingRoomScreen()),
@@ -44,6 +45,7 @@ class _GameoverScreenState extends State<GameoverScreen> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
+
                   showRanking = false;
                 });
               },
