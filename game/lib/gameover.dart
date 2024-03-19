@@ -45,7 +45,6 @@ class _GameoverScreenState extends State<GameoverScreen> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-
                   showRanking = false;
                 });
               },
@@ -88,23 +87,59 @@ class _GameoverScreenState extends State<GameoverScreen> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: GameoverScreen.ranking_names.length,
-                        itemBuilder: (context, index) {
-                          final rankingKeys =
-                              GameoverScreen.ranking_names.keys.toList();
-                          final playerName = rankingKeys[index];
-                          final playerScore =
-                              GameoverScreen.ranking_names[playerName];
-                          return ListTile(
-                            leading: Text((index + 1).toString()),
-                            title: Text(
-                              '$playerName - $playerScore',
-                              style: TextStyle(color: Colors.black),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: GameoverScreen.ranking_names.length,
+                              itemBuilder: (context, index) {
+                                final rankingKeys =
+                                GameoverScreen.ranking_names.keys.toList();
+                                rankingKeys.sort((a, b) {
+                                  final scoreA =
+                                  GameoverScreen.ranking_names[a];
+                                  final scoreB =
+                                  GameoverScreen.ranking_names[b];
+                                  if (scoreA != null && scoreB != null) {
+                                    return scoreB
+                                        .compareTo(scoreA); // Orden descendente
+                                  } else {
+                                    // Manejar el caso de valores nulos según tus necesidades
+                                    return 0; // Por ejemplo, mantener el orden original
+                                  }
+                                });
+                                final playerName = rankingKeys[index];
+                                final playerScore =
+                                GameoverScreen.ranking_names[playerName];
+                                return Card(
+                                  elevation: 3,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 10),
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors.blueGrey,
+                                      child: Text(
+                                        (index + 1).toString(),
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                    title: Text(
+                                      '$playerName - $playerScore',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        fontFamily:
+                                        'Montserrat', // Cambia "Montserrat" por la fuente que prefieras
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
+                          ],
+                        ),
                       ),
                     ],
                   ),

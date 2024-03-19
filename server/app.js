@@ -32,8 +32,13 @@ app.use(express.static('public'));
 const httpServer = app.listen(port, appListen);
 
 async function appListen() {
-  console.log(`Listening for HTTP queries on: http://localhost:${port}`);
+  const address = httpServer.address();
+  const ip = address.address === '::' ? 'localhost' : address.address; // Si la dirección es '::', entonces es 'localhost'
+  const port = address.port;
+
+  console.log(`Listening for HTTP queries on: http://${ip}:${port}/`);
 }
+
 
 // Close connections when process is killed
 process.on('SIGTERM', shutDown);
