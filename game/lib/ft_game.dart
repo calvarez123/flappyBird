@@ -89,9 +89,9 @@ class FtGame extends FlameGame
     Future.delayed(Duration(seconds: 12), () {
       numero += 1;
       actualizarPuntos(numero);
-      _player?.puntos+=1;
-      for (var opponent in _opponents){
-        opponent.puntos+=1;
+      _player?.puntos += 1;
+      for (var opponent in _opponents) {
+        opponent.puntos += 1;
       }
       world.remove(topPipe);
       world.remove(botPipe);
@@ -125,7 +125,7 @@ class FtGame extends FlameGame
     // Comprovar si 'data' és un Map i si 'type' és igual a 'data'
     if (data is Map<String, dynamic>) {
       if (data['type'] == 'welcome') {
-        initPlayer(data['id'].toString(),UserSelect.nom,UserSelect.img);
+        initPlayer(data['id'].toString(), UserSelect.nom, UserSelect.img);
         //generatePipe();
       }
       if (data['type'] == 'data') {
@@ -135,50 +135,44 @@ class FtGame extends FlameGame
         }
       }
       if (data['type'] == 'echar') {
-        for (var opponent in _opponents){
-          if (opponent.getID()==data['id'].toString()){
+        for (var opponent in _opponents) {
+          if (opponent.getID() == data['id'].toString()) {
             world.remove(opponent);
           }
         }
       }
       if (data['type'] == 'ranking') {
-       // print(data['data']);
+        // print(data['data']);
         data["data"].forEach((key, value) {
           GameoverScreen.ranking_names[key] = int.parse(value);
         });
-
       }
-
-
     }
   }
 
   void gameover(String id) {
-    String nombre=_player!.nom;
-    int puntos =_player!.puntos;
+    String nombre = _player!.nom;
+    int puntos = _player!.puntos;
     //GameoverScreen.ranking_names[_player!.nom]=_player!.puntos;
     // Eliminar al jugador del mundo
     world.remove(_player!);
-    websocket.sendMessage('{"type": "ranking", "nom": "$nombre", "puntos": "$puntos" }');
+    websocket.sendMessage(
+        '{"type": "ranking", "nom": "$nombre", "puntos": "$puntos" }');
     websocket.sendMessage('{"type": "echar", "id": "$id" }');
     _player?.updatePosition(Vector2(500, 500));
     this.overlays.add('gameover');
   }
 
-
-  void initPlayer(String id,String nom, String img) {
-
+  void initPlayer(String id, String nom, String img) {
     _player = FtPlayer(
         id: id,
         position: Vector2((canvasSize.x / 2), (canvasSize.y / 2)),
-        nom:UserSelect.nom,
+        nom: UserSelect.nom,
         img: img);
     world.add(_player as Component);
 
-    websocket.sendMessage(
-        '{"type": "init", "name": "$nom", "img": "$img"}');
+    websocket.sendMessage('{"type": "init", "name": "$nom", "img": "$img"}');
   }
-
 
   void updateOpponents(List<dynamic> opponentsData) {
     // Crea una llista amb els ID dels oponents actuals
@@ -277,5 +271,4 @@ class FtGame extends FlameGame
     final hue = random.nextDouble() * 360;
     return HSVColor.fromAHSV(1.0, hue, 1.0, 1.0).toColor();
   }
-
 }

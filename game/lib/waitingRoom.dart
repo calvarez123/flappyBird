@@ -6,21 +6,24 @@ import 'package:flutter/rendering.dart';
 import 'app.dart';
 
 class WaitingRoomScreen extends StatefulWidget {
-  static const String id = 'waiting_room'; // Identificador único para WaitingRoomScreen
+  static const String id =
+      'waiting_room'; // Identificador único para WaitingRoomScreen
   @override
   _WaitingRoomScreenState createState() => _WaitingRoomScreenState();
 }
 
 class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
   List<String> selectedImages = List.generate(1, (index) => '');
-  List<String> buttonTexts = ['Selecciona uno!!!']; // Lista de textos de botón
-  List<bool> buttonEnabled = [true]; // Lista de valores booleanos para habilitar/deshabilitar botones
+  List<String> buttonTexts = ['Nombre de Usuario']; // Lista de textos de botón
+  List<bool> buttonEnabled = [
+    true
+  ]; // Lista de valores booleanos para habilitar/deshabilitar botones
   bool isLoading = false; // Estado de carga del botón "Preparado"
 
   @override
   Widget build(BuildContext context) {
-    bool isReady =
-    buttonEnabled.every((element) => !element); // Verifica si todos los botones "Selecciona uno!!!" están deshabilitados
+    bool isReady = buttonEnabled.every((element) =>
+        !element); // Verifica si todos los botones "Selecciona uno!!!" están deshabilitados
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -55,7 +58,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   placeholder: 'Dirección IP',
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value) {
-                    UserSelect.IP=value;
+                    UserSelect.IP = value;
                   },
                 ),
               ),
@@ -65,7 +68,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   placeholder: 'Puerto',
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
-                    UserSelect.port=value;
+                    UserSelect.port = value;
                   },
                 ),
               ),
@@ -75,30 +78,31 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
           CupertinoButton(
             child: isLoading
                 ? CupertinoActivityIndicator()
-                : Text('Preparado'), // Cambia el texto o muestra un indicador de carga según el estado de isLoading
+                : Text(
+                    'Preparado'), // Cambia el texto o muestra un indicador de carga según el estado de isLoading
             onPressed: isLoading
                 ? null
                 : isReady
-                ? () {
-              setState(() {
-                isLoading = true; // Establece el estado de carga a true
-              });
+                    ? () {
+                        setState(() {
+                          isLoading =
+                              true; // Establece el estado de carga a true
+                        });
 
-              // Simula un retraso antes de redirigir a la siguiente pantalla
-              Future.delayed(Duration(seconds: 2), () {
-                Navigator.pushReplacement(
-                  context,
-                  CupertinoPageRoute(builder: (context) => App()),
-                );
-              });
-            }
-                : null,
+                        // Simula un retraso antes de redirigir a la siguiente pantalla
+                        Future.delayed(Duration(seconds: 2), () {
+                          Navigator.pushReplacement(
+                            context,
+                            CupertinoPageRoute(builder: (context) => App()),
+                          );
+                        });
+                      }
+                    : null,
           ),
         ],
       ),
     );
   }
-
 
   void _handleSelectButtonPressed(int index) {
     showCupertinoDialog(
@@ -114,7 +118,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                 placeholder: 'Pepito19',
                 onChanged: (value) {
                   enteredText = value;
-                  UserSelect.nom=enteredText;
+                  UserSelect.nom = enteredText;
                 },
               ),
             ],
@@ -158,24 +162,23 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
           decoration: BoxDecoration(
             image: selectedImagePath.isNotEmpty
                 ? DecorationImage(
-              image: AssetImage(selectedImagePath),
-              fit: BoxFit.cover,
-            )
+                    image: AssetImage(selectedImagePath),
+                    fit: BoxFit.cover,
+                  )
                 : null,
             color: selectedImagePath.isEmpty ? Colors.grey : null,
           ),
           child: selectedImagePath.isEmpty
               ? Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 40,
-          )
+                  Icons.add,
+                  color: Colors.white,
+                  size: 40,
+                )
               : null,
         ),
       ),
     );
   }
-
 
   void _openColorSelectionDialog(int index) {
     List<String> imagePaths = [
@@ -202,15 +205,14 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                       onTap: () {
                         setState(() {
                           selectedImages[index] = imagePath;
-                          if (selectedImages[index].contains("amarillo")){
-
-                            UserSelect.img="amarillo";
-                          }else if (selectedImages[index].contains("azul")){
-                            UserSelect.img="azul";
-                          }else if (selectedImages[index].contains("rojo")){
-                            UserSelect.img="rojo";
-                          }else if (selectedImages[index].contains("negro")){
-                            UserSelect.img="negro";
+                          if (selectedImages[index].contains("amarillo")) {
+                            UserSelect.img = "amarillo";
+                          } else if (selectedImages[index].contains("azul")) {
+                            UserSelect.img = "azul";
+                          } else if (selectedImages[index].contains("rojo")) {
+                            UserSelect.img = "rojo";
+                          } else if (selectedImages[index].contains("negro")) {
+                            UserSelect.img = "negro";
                           }
                         });
                         Navigator.pop(context);
@@ -233,14 +235,11 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
       },
     );
   }
-
-
-
 }
 
 class UserSelect {
   static String img = "";
-  static String nom ="Pepito19";
-  static String IP="localhost";
-  static String port="8888";
+  static String nom = "Pepito19";
+  static String IP = "localhost";
+  static String port = "8888";
 }
