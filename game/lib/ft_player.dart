@@ -11,12 +11,12 @@ import 'ft_game.dart';
 
 class FtPlayer extends SpriteComponent
     with KeyboardHandler, CollisionCallbacks, HasGameReference<FtGame> {
-  FtPlayer({required this.id, required this.img, required super.position})
+  FtPlayer({required this.id, required this.img,required this.nom, required super.position})
       : super(size: Vector2(10, 10), anchor: Anchor.center);
-
+  String nom ="";
   String id = "";
   String img; // Nuevo parámetro color
-
+  int puntos=0;
   Vector2 previousPosition = Vector2.zero();
   int previousHorizontalDirection = 0;
   int previousVerticalDirection = 0;

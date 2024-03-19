@@ -19,7 +19,7 @@ const debug = true
 
 var ws = new webSockets()
 var gLoop = new gameLoop()
-
+var ranking={}
 // Start HTTP server
 const app = express()
 const port = process.env.PORT || 8888
@@ -90,6 +90,15 @@ ws.onMessage = (socket, id, msg) => {
         type: "echar",
         id: id
     }))
+    case "ranking":
+      ranking[obj.nom]=obj.puntos
+      let dataObject = {
+        "type": "ranking",
+        "data":ranking
+      };
+      
+      let jsonString = JSON.stringify(dataObject);
+      ws.broadcast(jsonString)
   }
 }
 

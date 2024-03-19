@@ -2,32 +2,28 @@ import 'dart:io';
 import 'package:cupertino_base/ft_game.dart';
 import 'package:cupertino_base/waitingRoom.dart';
 import 'package:flutter/material.dart';
-
-class GameoverScreen extends StatelessWidget {
+class GameoverScreen extends StatefulWidget {
   final FtGame game;
   static const String id = 'gameover';
+  static Map<String, int> ranking_names = {};
 
   const GameoverScreen({Key? key, required this.game}) : super(key: key);
 
-  List<Widget> _buildNameList(List<String> names) {
-    return names.map((name) => Text(name)).toList();
-  }
+  @override
+  _GameoverScreenState createState() => _GameoverScreenState();
 
+
+}
+
+class _GameoverScreenState extends State<GameoverScreen> {
   @override
   Widget build(BuildContext context) {
-    List<String> names = [
-      'Nombre1',
-      'Nombre2',
-      'Nombre3'
-    ]; // Ejemplo de lista de nombres
-
     return Material(
       color: Colors.black38,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Usamos FileImage en lugar de Image.asset y proporcionamos la ruta de la imagen
             Image(image: FileImage(File('assets/images/gameover.png'))),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -45,9 +41,8 @@ class GameoverScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Container(
-              color: Colors.orange, // Color de fondo para la ListView
-              padding:
-              EdgeInsets.all(10), // Añadir espacio alrededor de la ListView
+              color: Colors.orange,
+              padding: EdgeInsets.all(10),
               child: Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,13 +58,15 @@ class GameoverScreen extends StatelessWidget {
                     SizedBox(height: 10),
                     ListView.builder(
                       shrinkWrap: true,
-                      itemCount: names.length,
+                      itemCount: GameoverScreen.ranking_names.length,
                       itemBuilder: (context, index) {
+                        final rankingKeys = GameoverScreen.ranking_names.keys.toList();
+                        final playerName = rankingKeys[index];
+                        final playerScore = GameoverScreen.ranking_names[playerName];
                         return ListTile(
-                          leading: Text((index + 1)
-                              .toString()), // Muestra el número de jugador
+                          leading: Text((index + 1).toString()),
                           title: Text(
-                            names[index],
+                            '$playerName - $playerScore',
                             style: TextStyle(color: Colors.black),
                           ),
                         );

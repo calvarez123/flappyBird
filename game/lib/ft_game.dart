@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cupertino_base/fondo.dart';
+import 'package:cupertino_base/gameover.dart';
 import 'package:cupertino_base/pipe.dart';
 import 'package:cupertino_base/puntos.dart';
 import 'package:cupertino_base/waitingRoom.dart';
@@ -88,6 +89,10 @@ class FtGame extends FlameGame
     Future.delayed(Duration(seconds: 12), () {
       numero += 1;
       actualizarPuntos(numero);
+      _player?.puntos+=1;
+      for (var opponent in _opponents){
+        opponent.puntos+=1;
+      }
       world.remove(topPipe);
       world.remove(botPipe);
     });
@@ -136,13 +141,26 @@ class FtGame extends FlameGame
           }
         }
       }
+      if (data['type'] == 'ranking') {
+       // print(data['data']);
+        data["data"].forEach((key, value) {
+          GameoverScreen.ranking_names[key] = int.parse(value);
+        });
+
+      }
+
+
     }
   }
 
   void gameover(String id) {
+    String nombre=_player!.nom;
+    int puntos =_player!.puntos;
+    //GameoverScreen.ranking_names[_player!.nom]=_player!.puntos;
     // Eliminar al jugador del mundo
     world.remove(_player!);
-    websocket.sendMessage('{"type": "echar", "name": "$id" }');
+    websocket.sendMessage('{"type": "ranking", "nom": "$nombre", "puntos": "$puntos" }');
+    websocket.sendMessage('{"type": "echar", "id": "$id" }');
     _player?.updatePosition(Vector2(500, 500));
     this.overlays.add('gameover');
   }
@@ -153,6 +171,7 @@ class FtGame extends FlameGame
     _player = FtPlayer(
         id: id,
         position: Vector2((canvasSize.x / 2), (canvasSize.y / 2)),
+        nom:UserSelect.nom,
         img: img);
     world.add(_player as Component);
 
@@ -204,6 +223,7 @@ class FtGame extends FlameGame
         var newOpponent = FtOpponent(
           id: id,
           position: Vector2(clientX, clientY),
+          nom: opponentData['name'],
           img: UserSelect.img,
         );
         if (newOpponent.id != _player?.id) {
@@ -257,4 +277,5 @@ class FtGame extends FlameGame
     final hue = random.nextDouble() * 360;
     return HSVColor.fromAHSV(1.0, hue, 1.0, 1.0).toColor();
   }
+
 }

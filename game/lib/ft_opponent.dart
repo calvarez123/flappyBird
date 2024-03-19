@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'ft_game.dart';
 
 class FtOpponent extends SpriteComponent with HasGameReference<FtGame> {
-  FtOpponent({required this.id, required super.position, required this.img})
+  FtOpponent({required this.id, required super.position,required nom, required this.img})
       : super(size: Vector2.all(64), anchor: Anchor.center);
-
+  String nom="";
   String id = "";
   String img = "";
-
+  int puntos=0;
   Vector2 targetPosition =
       Vector2.zero(); // Posición objetivo (la del servidor)
   double interpolationSpeed = 10; // Velocidad de interpolación
