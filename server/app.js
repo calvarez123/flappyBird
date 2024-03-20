@@ -32,7 +32,7 @@ app.use(express.static('public'));
 const httpServer = app.listen(port, appListen);
 async function appListen() {
   const address = httpServer.address();
-  const ip = address.address === '::' ? 'localhost' : address.address; 
+  const ip = address.address === '::' ? '0.0.0.0' : address.address; 
   const port = address.port;
 
   console.log(`Server listening at http://${ip}:${port}/`);
@@ -105,7 +105,7 @@ ws.onMessage = (socket, id, msg) => {
   switch (obj.type) {
     case "init":
       clientData.name = obj.name;
-      clientData.color = obj.color;
+      clientData.img = obj.img;
       id_nom[id]=clientData.name;
       break;
     case "move":
