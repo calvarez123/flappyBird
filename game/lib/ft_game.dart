@@ -111,7 +111,7 @@ class FtGame extends FlameGame
 
   void initializeWebSocket() {
     websocket = WebSocketsHandler();
-    websocket.connectToServer("localhost", 8888, serverMessageHandler);
+    websocket.connectToServer(UserSelect.IP, UserSelect.port, serverMessageHandler);
   }
 
   void serverMessageHandler(String message) {

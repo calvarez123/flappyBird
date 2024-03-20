@@ -30,14 +30,38 @@ app.use(express.static('public'));
 
 // Activate HTTP server
 const httpServer = app.listen(port, appListen);
-
 async function appListen() {
   const address = httpServer.address();
-  const ip = address.address === '::' ? 'localhost' : address.address; // Si la dirección es '::', entonces es 'localhost'
+  const ip = address.address === '::' ? 'localhost' : address.address; 
   const port = address.port;
 
-  console.log(`Listening for HTTP queries on: http://${ip}:${port}/`);
+  console.log(`Server listening at http://${ip}:${port}/`);
+  console.log(`WebSocket server running at ws://${ip}:${port}/`);
+
+  const { networkInterfaces } = require('os');
+  const nets = networkInterfaces();
+  const results = Object.create(null);
+
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+      const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4;
+      if (net.family === familyV4Value && !net.internal) {
+        if (!results[name]) {
+          results[name] = [];
+        }
+        results[name].push(net.address);
+      }
+    }
+  }
+
+  console.log('IPv4 Addresses:');
+  for (const name of Object.keys(results)) {
+    for (const ip of results[name]) {
+      console.log(`- ${name}: ${ip}`);
+    }
+  }
 }
+
 
 
 // Close connections when process is killed

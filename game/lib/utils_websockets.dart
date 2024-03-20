@@ -12,7 +12,7 @@ enum ConnectionStatus {
 class WebSocketsHandler {
   late Function _callback;
   String ip = UserSelect.IP;
-  String port = UserSelect.port;
+  String port = UserSelect.port ;
   //String ip = "localhost";
   //String port = "8888";
 
@@ -21,12 +21,12 @@ class WebSocketsHandler {
 
   String? mySocketId;
 
-  void connectToServer(String serverIp, int serverPort,
+  void connectToServer(String serverIp, String serverPort,
       void Function(String message) callback) async {
     // Set connection settings
     _callback = callback;
     ip = serverIp;
-    port = serverPort.toString();
+    port = serverPort;
 
     // Connect to server
     connectionStatus = ConnectionStatus.connecting;
@@ -35,6 +35,7 @@ class WebSocketsHandler {
     await Future.delayed(const Duration(seconds: 1));
 
     _socketClient = IOWebSocketChannel.connect("ws://$ip:$port");
+    print("$ip:$port");
     _socketClient!.stream.listen(
           (message) {
         if (connectionStatus != ConnectionStatus.connected) {

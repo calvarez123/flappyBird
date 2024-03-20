@@ -58,7 +58,9 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   placeholder: 'Dirección IP',
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value) {
+
                     UserSelect.IP = value;
+                    print(UserSelect.IP);
                   },
                 ),
               ),
@@ -69,6 +71,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
                     UserSelect.port = value;
+                    print(UserSelect.port);
                   },
                 ),
               ),
