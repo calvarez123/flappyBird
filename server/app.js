@@ -96,7 +96,7 @@ ws.onConnection = (socket, id) => {
 };
 
 ws.onMessage = (socket, id, msg) => {
-  if (debug) console.log(`New message from ${id}:  ${msg.substring(0, 32)}...`);
+  //if (debug) console.log(`New message from ${id}:  ${msg.substring(0, 32)}...`);
 
   let clientData = ws.getClientData(id);
   if (clientData == null) return;

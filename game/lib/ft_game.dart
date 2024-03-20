@@ -36,7 +36,6 @@ class FtGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    debugMode = true; // Uncomment to see the bounding boxes
     await images.loadAll([
       'player.png',
       'rocket.png',
@@ -111,7 +110,8 @@ class FtGame extends FlameGame
 
   void initializeWebSocket() {
     websocket = WebSocketsHandler();
-    websocket.connectToServer(UserSelect.IP, UserSelect.port, serverMessageHandler);
+    websocket.connectToServer(
+        UserSelect.IP, UserSelect.port, serverMessageHandler);
   }
 
   void serverMessageHandler(String message) {
