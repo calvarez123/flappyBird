@@ -218,7 +218,7 @@ class FtGame extends FlameGame
           id: id,
           position: Vector2(clientX, clientY),
           nom: opponentData['name'],
-          img: UserSelect.img,
+          img: opponentData['img'],
         );
         if (newOpponent.id != _player?.id) {
           _opponents.add(newOpponent);
